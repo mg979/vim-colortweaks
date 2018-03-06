@@ -39,8 +39,10 @@ REQUIREMENTS                                          *colortweaks-requirements*
 ==============================================================================
 
 {vim-colorscheme-switcher}{1} is required.
+{vim-misc}{2} is also required (being a dependency for the former).
 
                           {1} https://github.com/xolox/vim-colorscheme-switcher
+                          {2} http://github.com/xolox/vim-misc
 
 
 

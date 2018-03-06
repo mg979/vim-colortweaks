@@ -1,0 +1,146 @@
+*colortweaks.txt*    colortweaks     Version 0.1.0    Last change: March 6 2018
+
+COLORTWEAKS - TABLE OF CONTENTS                                *colortweaks-toc*
+==============================================================================
+
+    Introduction                          |colortweaks-intro|
+    Requirements                          |colortweaks-requirements|
+    Installation                          |colortweaks-installation|
+    Commands                              |colortweaks-commands|
+    Customization                         |colortweaks-customize|
+    Credits                               |colortweaks-credits|
+    License                               |colortweaks-license|
+
+
+
+INTRODUCTION                                                 *colortweaks-intro*
+==============================================================================
+
+Colortweaks is an add-on for |vim-colorscheme-switcher|
+
+It allows customization of schemes without the need to alter the scheme itself.
+It's nothing you couldn't do by changing them yourself, but this plugin will
+do it automatically at every scheme switch, and apply your presets for that
+scheme.
+
+Properties you can define, among others:
+
+* cursor color in normal/insert/replace mode (terminal only)
+* line highlight color (different for insert/normal mode)
+* line highlight presets for light/dark schemes
+* invert color and apply tweaks (for schemes with dark/light variants)
+* rotate among a list of schemes
+* further customizations for schemes (anything really, read |'highlight'|)
+
+
+
+
+REQUIREMENTS                                          *colortweaks-requirements*
+==============================================================================
+
+{vim-colorscheme-switcher}{1} is required.
+
+                          {1} https://github.com/xolox/vim-colorscheme-switcher
+
+
+
+INSTALLATION                                          *colortweaks-installation*
+==============================================================================
+
+Use {vim-plug}{2} or any other Vim plugin manager.
+
+With vim-plug:
+
+    `Plug 'mg979/vim-colortweaks'`
+
+                                      {2} https://github.com/junegunn/vim-plug
+
+
+
+COMMANDS                                                   *colortweaks-commads*
+==============================================================================
+
+
+ ---------------------------------+------------------------------------------
+ Mapping                          | Default                              ~
+ ---------------------------------+------------------------------------------
+ <Plug>ColorPrev                  | [cs
+ <Plug>ColorNext                  | ]cs
+ <Plug>RotatePrev                 | [cr
+ <Plug>RotateNext                 | ]cr
+ <Plug>ColorInvert                | <leader>cs
+
+
+
+CUSTOMIZATION                                            *colortweaks-customize*
+==============================================================================
+
+You can set a number options to define different colorscheme properties and
+behaviours.
+
+ --------------------------------+------+-----------------------------------
+ Variable                        | Type |     Details                      ~
+ --------------------------------+------+-----------------------------------
+ g:*colorscheme_default*           |  ""  | color scheme to be loaded at startup
+ g:*colortweaks_cursor_normal*     |  ""  |
+ g:*colortweaks_cursor_insert*     |  ""  |
+ g:*colortweaks_cursor_replace*    |  ""  |
+ g:*colortweaks_presets*           | bool | apply neutral highlight foreground
+ g:*dark_highlight_presets*        |  []  | presets for dark line highlight
+ g:*light_highlight_presets*       |  []  | presets for light line highlight
+ g:*dark_highlight_for*            |  []  | apply preset to these schemes
+ g:*light_highlight_for*           |  []  | ,,
+ g:*colorscheme_rotate*            |  []  | rotate list
+ g:*skip_highlight_for*            |  []  | skip presets entirely for listed schemes
+ g:*custom_dark_highlight_for*     |  {}  | scheme-specific
+ g:*custom_light_highlight_for*    |  {}  | ,,
+ g:*custom_colors_for*             |  {}  | scheme specific, other highlight options
+>
+Further explanations:
+
+* (dark/light) |highlight_presets| and |highlight_for| let you define a line
+  highlight preset and have it applied on all listed schemes. Two values for
+  normal/insert mode, eg:
+>
+    let g:dark_highlight_presets = ['guibg=#2d2d2d ctermbg=235', 'guibg=black ctermbg=black']
+    let g:dark_highlight_for = ['northpole', 'cobalt', 'wombat256mod', 'zenburn', 'yowish']
+>
+* (dark/light) |custom_highlight_for| lets you define scheme-specific highlight, eg:
+>
+    let g:custom_dark_highlight_for = {
+            \'nova': ['guibg=#4f616b ctermbg=236', 'guibg=#282c34 ctermbg=234'],
+            \'onedark': ['guibg=#2c323c ctermbg=236', 'guibg=#1f2329 ctermbg=234'],
+            \'zenburn': ['guibg=#333333 ctermbg=236', 'guibg=#1e1e1e ctermbg=234'],
+            \'cobalt': ['guibg=#1c1c1c ctermbg=236', 'guibg=#0c0c0c ctermbg=234'],
+            \'space-vim-dark': ['guibg=#1c1c1c ctermbg=236', 'guibg=#0c0c0c ctermbg=234'],
+            \}
+>
+* |custom_colors_for| lets you define scheme-specific options of all kinds, eg:
+>
+    let g:custom_colors_for = {
+            \'nova': ['MatchParen guifg=#1e1e1e guibg=#e85858', 'VertSplit guibg=#282c34'],
+            \'space-vim-dark': ['LineNr guifg=#4d4d4d guibg=#1e1e1e'],
+            \'wombat256mod': ['LineNr guifg=#4d4d4d guibg=#111111', 'EndOfBuffer guibg=#242424'],
+            \'zenburn': ['Normal guibg=#2d2d2d', 'Pmenu guibg=#404040'],
+            \'desert': ['LineNr guifg=#a1a460 guibg=#2e2e2e', 'Pmenu guifg=#c8cc77 guibg=#636363', 'PmenuSel guifg=#555726', 'PmenuiBar guifg=#c8cc77 guibg=#636363'],
+            \}
+
+
+CREDITS                                                    *colortweaks-credits*
+==============================================================================
+
+Braam Moolenaar for Vim
+xolox for |vim-colorscheme-switcher|
+
+
+
+LICENSE                                                    *colortweaks-license*
+==============================================================================
+
+MIT
+
+
+==============================================================================
+vim:tw=78:sw=2:ts=2:ft=help:norl:nowrap:
+
+

@@ -191,9 +191,13 @@ if !exists('g:light_highlight_presets')
 if !exists('g:skip_highlight_for')
     let g:skip_highlight_for = [] | endif
 
+if !exists('g:custom_colors_for')
+    let g:custom_colors_for = {} | endif
+
 let s:color_index = index(g:colorscheme_rotate, g:colors_name)
 let s:last_colors_insert = <SID>HighlightColor(1)
 let s:last_colors_normal = <SID>HighlightColor(0)
+let fzf_custom = {'Colors': {'sink': function('colortweaks#fzf')}}
 
 call xolox#colorscheme_switcher#switch_to(g:colorscheme_default)
 call ColorTweaks()

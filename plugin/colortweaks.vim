@@ -18,7 +18,13 @@ if !exists('g:colortweaks_disable_mappings')
     if !hasmapto('<Plug>ColorInvert')
         map <unique> <leader>cs <Plug>ColorInvert
     endif
+    if !hasmapto('<Plug>Colors')
+        map <unique> <leader>C <Plug>Colors
+    endif
 endif
+
+nnoremap <unique> <script> <Plug>Colors <SID>Colors
+nnoremap <SID>Colors :Colors<cr>
 
 nnoremap <unique> <script> <Plug>ColorInvert <SID>ColorInvert
 nnoremap <SID>ColorInvert :call <SID>ColorInvert()<cr>
@@ -197,13 +203,13 @@ if !exists('g:custom_colors_for')
 let s:color_index = index(g:colorscheme_rotate, g:colors_name)
 let s:last_colors_insert = <SID>HighlightColor(1)
 let s:last_colors_normal = <SID>HighlightColor(0)
-let fzf_custom = {'Colors': {'sink': function('colortweaks#fzf')}}
 
 call xolox#colorscheme_switcher#switch_to(g:colorscheme_default)
 call ColorTweaks()
 
 autocmd InsertEnter * execute "silent hi CursorLine ".s:last_colors_insert
 autocmd InsertLeave * execute "silent hi CursorLine ".s:last_colors_normal
+command! -bang Colors call fzf#vim#colors({'sink': function('colortweaks#fzf'), 'options': '--reverse'}, <bang>0)
 
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " Colors in terminal mode

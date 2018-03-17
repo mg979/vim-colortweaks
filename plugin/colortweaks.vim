@@ -88,15 +88,15 @@ function s:Fallback(mode)
     """Fallback for uncustomized schemes. Preset higlight is applied if it can
     """be applied for the scheme.
 
-    if &background == 'dark' && index(g:dark_highlight_for, g:colors_name) >= 0
-
-        if a:mode | return g:dark_highlight_presets[1]
-        else | return g:dark_highlight_presets[0] | endif
-
-    elseif &background == 'light' && index(g:light_highlight_for, g:colors_name) >= 0
+    if &background == 'light' && index(g:light_highlight_for, g:colors_name) >= 0
 
         if a:mode | return g:light_highlight_presets[1]
         else | return g:light_highlight_presets[0] | endif
+
+    elseif index(g:dark_highlight_for, g:colors_name) >= 0
+
+        if a:mode | return g:dark_highlight_presets[1]
+        else | return g:dark_highlight_presets[0] | endif
 
     else | return '' | endif
         " no highlight
@@ -109,10 +109,10 @@ function! <SID>HighlightColor(mode)
         if index(g:skip_highlight_for, g:colors_name) >= 0 | return '' | endif
     endif
 
-    if &background == 'dark' && has_key(g:custom_dark_highlight_for, g:colors_name)
-        let col = g:custom_dark_highlight_for[g:colors_name]
-    elseif has_key(g:custom_light_highlight_for, g:colors_name)
+    if &background == 'light' && has_key(g:custom_light_highlight_for, g:colors_name)
         let col = g:custom_light_highlight_for[g:colors_name]
+    elseif has_key(g:custom_dark_highlight_for, g:colors_name)
+        let col = g:custom_dark_highlight_for[g:colors_name]
     else
         return s:Fallback(a:mode)
     endif

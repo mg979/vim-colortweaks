@@ -28,6 +28,7 @@ Properties you can define, among others:
 * cursor color in normal/insert/replace mode (terminal only)
 * line highlight color (different for insert/normal mode)
 * line highlight presets for light/dark schemes
+* alternate between the two last selected schemes
 * invert color and apply tweaks (for schemes with dark/light variants)
 * rotate among a list of schemes
 * further customizations for schemes (anything really, read |'highlight'|)
@@ -63,14 +64,15 @@ COMMANDS                                                   *colortweaks-commads*
 ==============================================================================
 
 
- ---------------------------------+------------------------------------------
- Mapping                          | Default                              ~
- ---------------------------------+------------------------------------------
- <Plug>ColorPrev                  | [cs
- <Plug>ColorNext                  | ]cs
- <Plug>RotatePrev                 | [cr
- <Plug>RotateNext                 | ]cr
- <Plug>ColorInvert                | <leader>cs
+ ---------------------------------+-------------+-----------------------------
+ Mapping                          | Default     | Notes                     ~
+ ---------------------------------+-------------+-----------------------------
+ <Plug>ColorPrev                  | [cs         |
+ <Plug>ColorNext                  | ]cs         |
+ <Plug>RotatePrev                 | [cr         |
+ <Plug>RotateNext                 | ]cr         |
+ <Plug>ColorSwitch                | <leader>cs  | alternate the last 2 schemes
+ <Plug>ColorInvert                | <leader>ci  | try to invert dark/light
 
 
 
@@ -84,9 +86,10 @@ behaviours.
  Variable                        | Type |     Details                      ~
  --------------------------------+------+-----------------------------------
  g:*colorscheme_default*           |  ""  | color scheme to be loaded at startup
- g:*colortweaks_cursor_normal*     |  ""  |
- g:*colortweaks_cursor_insert*     |  ""  |
- g:*colortweaks_cursor_replace*    |  ""  |
+ g:*colorscheme_default_alt*       |  ""  | default alternate color scheme
+ g:*colortweaks_cursor_normal*     |  ""  | cursor color for mode
+ g:*colortweaks_cursor_insert*     |  ""  | ,,
+ g:*colortweaks_cursor_replace*    |  ""  | ,,
  g:*colortweaks_presets*           | bool | apply neutral highlight foreground
  g:*dark_highlight_presets*        |  []  | presets for dark line highlight
  g:*light_highlight_presets*       |  []  | presets for light line highlight

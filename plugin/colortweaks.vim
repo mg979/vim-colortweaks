@@ -4,48 +4,48 @@
 
 if !exists('g:colortweaks_disable_mappings')
     if !hasmapto('<Plug>ColorNext')
-        map <unique> ]cs <Plug>ColorNext
+        silent! map <unique> ]cs <Plug>ColorNext
     endif
     if !hasmapto('<Plug>ColorPrev')
-        map <unique> [cs <Plug>ColorPrev
+        silent! map <unique> [cs <Plug>ColorPrev
     endif
-    if !hasmapto('<Plug>RotateNext')
-        map <unique> ]cr <Plug>RotateNext
+    if !hasmapto('<Plug>ColorRotateNext')
+        silent! map <unique> ]cr <Plug>ColorRotateNext
     endif
-    if !hasmapto('<Plug>RotatePrev')
-        map <unique> [cr <Plug>RotatePrev
+    if !hasmapto('<Plug>ColorRotatePrev')
+        silent! map <unique> [cr <Plug>ColorRotatePrev
     endif
     if !hasmapto('<Plug>ColorSwitch')
-        map <unique> <leader>cs <Plug>ColorSwitch
+        silent! map <unique> <leader>cs <Plug>ColorSwitch
     endif
     if !hasmapto('<Plug>ColorInvert')
-        map <unique> <leader>ci <Plug>ColorInvert
+        silent! map <unique> <leader>ci <Plug>ColorInvert
     endif
     if !hasmapto('<Plug>Colors')
-        map <unique> <leader>C <Plug>Colors
+        silent! map <unique> <leader>C <Plug>ColorsList
     endif
 endif
 
-nnoremap <unique> <script> <Plug>Colors <SID>Colors
-nnoremap <silent> <SID>Colors :Colors<cr>
+nnoremap <script> <Plug>ColorsList <SID>ColorsList
+nnoremap <silent> <SID>ColorsList :Colors<cr>
 
-nnoremap <unique> <script> <Plug>ColorSwitch <SID>ColorSwitch
+nnoremap <script> <Plug>ColorSwitch <SID>ColorSwitch
 nnoremap <silent> <SID>ColorSwitch :call colortweaks#color_switch()<cr>
 
-nnoremap <unique> <script> <Plug>ColorInvert <SID>ColorInvert
+nnoremap <script> <Plug>ColorInvert <SID>ColorInvert
 nnoremap <silent> <SID>ColorInvert :call colortweaks#color_invert()<cr>:unsilent call colortweaks#check_invert()<cr>
 
-nnoremap <unique> <script> <Plug>ColorNext <SID>ColorNext
+nnoremap <script> <Plug>ColorNext <SID>ColorNext
 nnoremap <silent> <SID>ColorNext :NextColorScheme<cr>:call colortweaks#color_tweaks()<cr>
 
-nnoremap <unique> <script> <Plug>ColorPrev <SID>ColorPrev
+nnoremap <script> <Plug>ColorPrev <SID>ColorPrev
 nnoremap <silent> <SID>ColorPrev :PrevColorScheme<cr>:call colortweaks#color_tweaks()<cr>
 
-nnoremap <unique> <script> <Plug>RotateNext <SID>RotateNext
-nnoremap <silent> <SID>RotateNext :call colortweaks#rotate_next()<cr>:unsilent echo "Current color scheme: ".g:colors_name<cr>
+nnoremap <script> <Plug>ColorRotateNext <SID>ColorRotateNext
+nnoremap <silent> <SID>ColorRotateNext :call colortweaks#rotate_next()<cr>:unsilent echo "Current color scheme: ".g:colors_name<cr>
 
-nnoremap <unique> <script> <Plug>RotatePrev <SID>RotatePrev
-nnoremap <silent> <SID>RotatePrev :call colortweaks#rotate_prev()<cr>:unsilent echo "Current color scheme: ".g:colors_name<cr>
+nnoremap <script> <Plug>ColorRotatePrev <SID>ColorRotatePrev
+nnoremap <silent> <SID>ColorRotatePrev :call colortweaks#rotate_prev()<cr>:unsilent echo "Current color scheme: ".g:colors_name<cr>
 
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""

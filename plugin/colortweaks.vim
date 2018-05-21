@@ -4,16 +4,16 @@
 
 if !exists('g:colortweaks_disable_mappings')
     if !hasmapto('<Plug>ColorNext')
-        silent! map <unique> ]cs <Plug>ColorNext
+        silent! map <unique> ]C <Plug>ColorNext
     endif
     if !hasmapto('<Plug>ColorPrev')
-        silent! map <unique> [cs <Plug>ColorPrev
+        silent! map <unique> [C <Plug>ColorPrev
     endif
     if !hasmapto('<Plug>ColorRotateNext')
-        silent! map <unique> ]cr <Plug>ColorRotateNext
+        silent! map <unique> ]cs <Plug>ColorRotateNext
     endif
     if !hasmapto('<Plug>ColorRotatePrev')
-        silent! map <unique> [cr <Plug>ColorRotatePrev
+        silent! map <unique> [cs <Plug>ColorRotatePrev
     endif
     if !hasmapto('<Plug>ColorSwitch')
         silent! map <unique> <leader>cs <Plug>ColorSwitch

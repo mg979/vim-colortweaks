@@ -146,8 +146,11 @@ function! colortweaks#color_tweaks()
         for prop in col | execute "hi ".prop | endfor
     endif
 
-    if exists(g:colors_name)
-        let s:color_index = index(g:colorscheme_rotate, g:colors_name) | endif
+    if exists('*ColorTweaks_all')            | call ColorTweaks_all()                     | endif
+    if exists('*ColorTweaks_'.g:colors_name) | exe "call ColorTweaks_".g:colors_name."()" | endif
 
+    if exists('g:colors_name')
+        " custom functions
+        let s:color_index = index(g:colorscheme_rotate, g:colors_name)                        | endif
 endfunction
 

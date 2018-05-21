@@ -67,10 +67,10 @@ COMMANDS                                                   *colortweaks-commads*
  ---------------------------------+-------------+-----------------------------
  Mapping                          | Default     | Notes                     ~
  ---------------------------------+-------------+-----------------------------
- <Plug>ColorPrev                  | [cs         |
- <Plug>ColorNext                  | ]cs         |
- <Plug>RotatePrev                 | [cr         |
- <Plug>RotateNext                 | ]cr         |
+ <Plug>ColorPrev                  | [C          |
+ <Plug>ColorNext                  | ]C          |
+ <Plug>RotatePrev                 | [cs         |
+ <Plug>RotateNext                 | ]cs         |
  <Plug>ColorSwitch                | <leader>cs  | alternate the last 2 schemes
  <Plug>ColorInvert                | <leader>ci  | try to invert dark/light
 

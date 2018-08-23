@@ -1,51 +1,25 @@
-""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-" Mappings
-""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-
-if !exists('g:colortweaks_disable_mappings')
-    if !hasmapto('<Plug>ColorNext')
-        silent! map <unique> ]C <Plug>ColorNext
+fun! s:mapkeys(keys, plug)
+    let plug = '<Plug>Color'.a:plug
+    if maparg(a:keys, 'n') == '' && !hasmapto(plug)
+        silent! execute 'nmap <unique>' a:keys plug
     endif
-    if !hasmapto('<Plug>ColorPrev')
-        silent! map <unique> [C <Plug>ColorPrev
-    endif
-    if !hasmapto('<Plug>ColorRotateNext')
-        silent! map <unique> ]cs <Plug>ColorRotateNext
-    endif
-    if !hasmapto('<Plug>ColorRotatePrev')
-        silent! map <unique> [cs <Plug>ColorRotatePrev
-    endif
-    if !hasmapto('<Plug>ColorSwitch')
-        silent! map <unique> <leader>cs <Plug>ColorSwitch
-    endif
-    if !hasmapto('<Plug>ColorInvert')
-        silent! map <unique> <leader>ci <Plug>ColorInvert
-    endif
-    if !hasmapto('<Plug>Colors')
-        silent! map <unique> <leader>C <Plug>ColorsList
-    endif
-endif
+endfun
 
-nnoremap <script> <Plug>ColorsList <SID>ColorsList
-nnoremap <silent> <SID>ColorsList :Colors<cr>
+call s:mapkeys(']C', 'Next')
+call s:mapkeys('[C', 'Prev')
+call s:mapkeys(']cs', 'RotateNext')
+call s:mapkeys('[cs', 'RotatePrev')
+call s:mapkeys('<leader>cs', 'Switch')
+call s:mapkeys('<leader>ci', 'Invert')
+call s:mapkeys('<leader>C', 'sList')
 
-nnoremap <script> <Plug>ColorSwitch <SID>ColorSwitch
-nnoremap <silent> <SID>ColorSwitch :call colortweaks#color_switch()<cr>
-
-nnoremap <script> <Plug>ColorInvert <SID>ColorInvert
-nnoremap <silent> <SID>ColorInvert :call colortweaks#color_invert()<cr>:unsilent call colortweaks#check_invert()<cr>
-
-nnoremap <script> <Plug>ColorNext <SID>ColorNext
-nnoremap <silent> <SID>ColorNext :NextColorScheme<cr>:call colortweaks#color_tweaks()<cr>
-
-nnoremap <script> <Plug>ColorPrev <SID>ColorPrev
-nnoremap <silent> <SID>ColorPrev :PrevColorScheme<cr>:call colortweaks#color_tweaks()<cr>
-
-nnoremap <script> <Plug>ColorRotateNext <SID>ColorRotateNext
-nnoremap <silent> <SID>ColorRotateNext :call colortweaks#rotate_next()<cr>:unsilent echo "Current color scheme: ".g:colors_name<cr>
-
-nnoremap <script> <Plug>ColorRotatePrev <SID>ColorRotatePrev
-nnoremap <silent> <SID>ColorRotatePrev :call colortweaks#rotate_prev()<cr>:unsilent echo "Current color scheme: ".g:colors_name<cr>
+nnoremap <silent> <Plug>ColorsList      :Colors<cr>
+nnoremap <silent> <Plug>ColorSwitch     :call colortweaks#color_switch()<cr>
+nnoremap <silent> <Plug>ColorInvert     :call colortweaks#color_invert()<cr>:unsilent call colortweaks#check_invert()<cr>
+nnoremap <silent> <Plug>ColorNext       :NextColorScheme<cr>:call colortweaks#color_tweaks()<cr>
+nnoremap <silent> <Plug>ColorPrev       :PrevColorScheme<cr>:call colortweaks#color_tweaks()<cr>
+nnoremap <silent> <Plug>ColorRotateNext :call colortweaks#rotate_next()<cr>:unsilent echo "Current color scheme: ".g:colors_name<cr>
+nnoremap <silent> <Plug>ColorRotatePrev :call colortweaks#rotate_prev()<cr>:unsilent echo "Current color scheme: ".g:colors_name<cr>
 
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
@@ -56,7 +30,8 @@ if !exists('g:colorscheme_default')
     let g:colorscheme_default = 'default'
     let g:colors_name = 'default'
 else
-    let g:colors_name = g:colorscheme_default | endif
+    let g:colors_name = g:colorscheme_default
+endif
 
 let g:colorscheme_default_alt    = get(g:, 'colorscheme_default_alt', 'desert')
 let g:colortweaks_cursor_normal  = get(g:, 'colortweaks_cursor_normal', 'green')
@@ -90,7 +65,16 @@ if $COLORTERM == ( 'gnome-terminal' || 'rxvt-xpm' )
     set t_Co=256
 endif
 
-if &term =~ "xterm\\|rxvt"
+if get(g:, 'colortweaks_konsole', 0)
+    set termguicolors
+    autocmd VimEnter * silent !konsoleprofile UseCustomCursorColor=1
+    let &t_EI = "\<Esc>]50;CursorShape=0;CustomCursorColor=green\x7"
+    let &t_SI = "\<Esc>]50;CursorShape=1;CustomCursorColor=orange;BlinkingCursorEnabled=1\x7"
+    let &t_SR = "\<Esc>]50;CursorShape=2;CustomCursorColor=red;BlinkingCursorEnabled=0\x7"
+    silent !konsoleprofile CustomCursorColor=red
+    autocmd VimLeave * silent !konsoleprofile CustomCursorColor=gray;BlinkingCursorEnabled=0
+
+elseif &term =~ "xterm\\|rxvt"
     " cursor in insert mode
     let &t_SI = "\<Esc>]12;".g:colortweaks_cursor_insert."\x7"
     " cursor in replace mode

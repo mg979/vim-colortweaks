@@ -1,4 +1,4 @@
-*colortweaks.txt*    colortweaks     Version 0.1.0    Last change: March 6 2018
+*colortweaks.txt*    colortweaks     Version 0.2.0    Last change: August 27 2018
 
 COLORTWEAKS - TABLE OF CONTENTS                                *colortweaks-toc*
 ==============================================================================
@@ -7,8 +7,9 @@ COLORTWEAKS - TABLE OF CONTENTS                                *colortweaks-toc*
     Installation                          |colortweaks-installation|
     Commands                              |colortweaks-commands|
     Customization                         |colortweaks-customize|
-    Credits                               |colortweaks-credits|
-    License                               |colortweaks-license|
+    Cursor line                           |colortweaks-cursorline|
+    Cursor shape/color                    |colortweaks-cursor|
+    Example configuration                 |colortweaks-example|
 
 
 
@@ -22,14 +23,14 @@ scheme.
 
 Properties you can define, among others:
 
-* cursor color in normal/insert/replace mode (terminal only)
+* cursor color in normal/insert/replace mode
 * line highlight color (different for insert/normal mode)
 * line highlight presets for light/dark schemes
 * alternate between the two last selected schemes
-* invert color and apply tweaks (for schemes with dark/light variants)
+* invert background color
 * rotate among a list of schemes
-* further customizations for schemes (anything really, read |'highlight'|)
-
+* further customizations for schemes
+* can cooperate with `https://github.com/xolox/vim-colorscheme-switcher`
 
 
 
@@ -42,24 +43,31 @@ With vim-plug:
 
     `Plug 'mg979/vim-colortweaks'`
 
-                                      {2} https://github.com/junegunn/vim-plug
+                                      {1} https://github.com/junegunn/vim-plug
 
+Note that by default it does absolutely nothing. You must set up the options.
 
 
 COMMANDS                                                   *colortweaks-commads*
 ==============================================================================
 
+---------------------------------+-------------+-----------------------------
+Mapping                          | Default     | Notes                     ~
+---------------------------------+-------------+-----------------------------
+<Plug>RotatePrev                 | [cs         |
+<Plug>RotateNext                 | ]cs         |
+<Plug>ColorSwitch                | <leader>cs  | alternate the last 2 schemes
+<Plug>ColorInvert                | <leader>ci  | try to invert dark/light
+<Plug>ColorsList                 | <leader>C   | custom fzf command
+<Plug>ColorPrev                  | [C          | only with {2}
+<Plug>ColorNext                  | ]C          | only with {2}
 
- ---------------------------------+-------------+-----------------------------
- Mapping                          | Default     | Notes                     ~
- ---------------------------------+-------------+-----------------------------
- <Plug>ColorPrev                  | [C          |
- <Plug>ColorNext                  | ]C          |
- <Plug>RotatePrev                 | [cs         |
- <Plug>RotateNext                 | ]cs         |
- <Plug>ColorSwitch                | <leader>cs  | alternate the last 2 schemes
- <Plug>ColorInvert                | <leader>ci  | try to invert dark/light
+:Colorscheme <arg>                      as `:colorscheme`, but applying tweaks
+                               or you can set `g:colortweaks.autocommand` to 1
 
+If {2} is installed, its command will be run when switching schemes.
+
+                         {2} https://github.com/xolox/vim-colorscheme-switcher
 
 
 CUSTOMIZATION                                            *colortweaks-customize*
@@ -68,69 +76,133 @@ CUSTOMIZATION                                            *colortweaks-customize*
 You can set a number options to define different colorscheme properties and
 behaviours.
 
- --------------------------------+------+-----------------------------------
- Variable                        | Type |     Details                      ~
- --------------------------------+------+-----------------------------------
- g:*colorscheme_default*           |  ""  | color scheme to be loaded at startup
- g:*colorscheme_default_alt*       |  ""  | default alternate color scheme
- g:*colortweaks_cursor_normal*     |  ""  | cursor color for mode
- g:*colortweaks_cursor_insert*     |  ""  | ,,
- g:*colortweaks_cursor_replace*    |  ""  | ,,
- g:*colortweaks_presets*           | bool | apply neutral highlight foreground
- g:*dark_highlight_presets*        |  []  | presets for dark line highlight
- g:*light_highlight_presets*       |  []  | presets for light line highlight
- g:*dark_highlight_for*            |  []  | apply preset to these schemes
- g:*light_highlight_for*           |  []  | ,,
- g:*colorscheme_rotate*            |  []  | rotate list
- g:*skip_highlight_for*            |  []  | skip presets entirely for listed schemes
- g:*custom_dark_highlight_for*     |  {}  | scheme-specific
- g:*custom_light_highlight_for*    |  {}  | ,,
- g:*custom_colors_for*             |  {}  | scheme specific, other highlight options
+First, initialize the dictionary
 >
-Further explanations:
+  let g:colortweaks = {}
+<
 
-* (dark/light) |highlight_presets| and |highlight_for| let you define a line
-  highlight preset and have it applied on all listed schemes. Two values for
-  normal/insert mode, eg:
+Then add any of these keys:
+
+--------------------------------+------+-----------------------------------
+g:colortweaks.KEY               | Type |     Details                      ~
+--------------------------------+------+-----------------------------------
+`default`                         | str  | color scheme to be loaded at startup
+`default_alt`                     | str  | default alternate color scheme
+`autocommand`                     | bool | apply tweaks also on |Colorscheme| autocommand
+`terminal_cursor`                 | bool | handle terminal cursor shape/color
+`terminal_konsole`                | bool | same, using Konsole terminal
+`colorscheme_rotate`              |  []  | colorscheme rotate list
+`custom_colors`                   |  {}  | scheme specific, other highlight options
+
+`g:colortweaks.custom_colors` lets you define scheme-specific highlight options.
+The full command is needed for each item in the lists.
 >
-    let g:dark_highlight_presets = ['guibg=#2d2d2d ctermbg=235', 'guibg=black ctermbg=black']
-    let g:dark_highlight_for = ['northpole', 'cobalt', 'wombat256mod', 'zenburn', 'yowish']
+  let g:colortweaks.custom_colors = {
+    \'nova': ['hi MatchParen guifg=#e85858', 'hi VertSplit guibg=#282c34'],
+    \'space-vim-dark': ['hi LineNr guifg=#4d4d4d guibg=#1e1e1e'],
+    \'wombat256mod': ['hi LineNr guifg=#4d4d4d guibg=#111111', 'hi EndOfBuffer guibg=#242424'],
+    \'zenburn': ['hi Normal guibg=#2d2d2d', 'hi Pmenu guibg=#404040'],
+    \'desert': ['hi LineNr guifg=#a1a460 guibg=#2e2e2e', 'hi Pmenu guifg=#c8cc77 guibg=#636363', 'PmenuSel guifg=#555726', 'PmenuiBar guifg=#c8cc77 guibg=#636363'],
+    \}
 >
-* (dark/light) |custom_highlight_for| lets you define scheme-specific highlight, eg:
+
+You can also define functions that will be called when switching to a
+colorscheme, or anytime a colorscheme is switched.
 >
-    let g:custom_dark_highlight_for = {
-            \'nova': ['guibg=#4f616b ctermbg=236', 'guibg=#282c34 ctermbg=234'],
-            \'onedark': ['guibg=#2c323c ctermbg=236', 'guibg=#1f2329 ctermbg=234'],
-            \'zenburn': ['guibg=#333333 ctermbg=236', 'guibg=#1e1e1e ctermbg=234'],
-            \'cobalt': ['guibg=#1c1c1c ctermbg=236', 'guibg=#0c0c0c ctermbg=234'],
-            \'space-vim-dark': ['guibg=#1c1c1c ctermbg=236', 'guibg=#0c0c0c ctermbg=234'],
-            \}
+  function! ColorTweaks_{colorscheme}()
+    " stuff here
+  endfunction
+
+  function! ColorTweaks_all()
+    " stuff here
+  endfunction
 >
-* |custom_colors_for| lets you define scheme-specific options of all kinds, eg:
->
-    let g:custom_colors_for = {
-            \'nova': ['MatchParen guifg=#1e1e1e guibg=#e85858', 'VertSplit guibg=#282c34'],
-            \'space-vim-dark': ['LineNr guifg=#4d4d4d guibg=#1e1e1e'],
-            \'wombat256mod': ['LineNr guifg=#4d4d4d guibg=#111111', 'EndOfBuffer guibg=#242424'],
-            \'zenburn': ['Normal guibg=#2d2d2d', 'Pmenu guibg=#404040'],
-            \'desert': ['LineNr guifg=#a1a460 guibg=#2e2e2e', 'Pmenu guifg=#c8cc77 guibg=#636363', 'PmenuSel guifg=#555726', 'PmenuiBar guifg=#c8cc77 guibg=#636363'],
-            \}
 
 
-CREDITS                                                    *colortweaks-credits*
+CURSORLINE                                              *colortweaks-cursorline*
 ==============================================================================
 
-Braam Moolenaar for Vim
+For the |CursorLine| highlight group there are special settings.
+>
+  let g:colortweaks.dark_cursorline_presets       = ['guibg=#2d2d2d ctermbg=235', 'guibg=black ctermbg=16']
+  let g:colortweaks.dark_cursorline_for           = []
+  let g:colortweaks.dark_cursorline_custom        = {}
+  let g:colortweaks.light_cursorline_presets      = ['guibg=#d7d7af ctermbg=187', 'guibg=#dadada ctermbg=253']
+  let g:colortweaks.light_cursorline_for          = []
+  let g:colortweaks.light_cursorline_custom       = {}
 
+- 'presets': for normal and insert mode
+- 'for'    : presets apply to the specified schemes. Empty by default!
+- 'custom' : if a scheme needs a custom |CursorLine|, it can be defined here ([normal, insert]).
 
+Example:
+>
+  let g:colortweaks.dark_cursorline_custom = {
+        \'nova': ['guibg=#4f616b ctermbg=236', 'guibg=#282c34 ctermbg=234'],
+        \'onedark': ['guibg=#2c323c ctermbg=236', 'guibg=#1f2329 ctermbg=234'],
+        \'zenburn': ['guibg=#555555 ctermbg=236', 'guibg=#1e1e1e ctermbg=234'],
+        \'seoul256': ['guibg=#3f3f3f ctermbg=236', 'guibg=#2d2d2d ctermbg=234'],
+        \}
+>
 
-LICENSE                                                    *colortweaks-license*
+CURSOR SHAPE                                                *colortweaks-cursor*
 ==============================================================================
 
-MIT
+To enable cursor shape/color in terminal, set:
+>
+  let g:colortweaks.terminal_cursor = 1   "default 1
+
+If you use Konsole terminal, set:
+>
+  let g:colortweaks.terminal_konsole = 1  "default 0
+
+
+Cursor shape/color presets:
+>
+  let g:colortweaks.cursor.normal   = {'color': 'green', 'shape': 'block', 'blink': 0}
+  let g:colortweaks.cursor.insert   = {'color': 'orange', 'shape': 'vbar', 'blink': 1}
+  let g:colortweaks.cursor.replace  = {'color': 'red', 'shape': 'hbar', 'blink': 1}
+  let g:colortweaks.cursor.terminal = g:colortweaks.cursor.normal
+>
+>
+`g:colortweaks.cursor.terminal` is used to restore cursor color on vim exit.
+
+
+In neovim/gvim, there are the following additional settings (disabled by default):
+>
+  let g:colortweaks.cursor.command  = {'color': 'green', 'shape': 'block', 'blink': 1}
+  let g:colortweaks.cursor.visual   = {'color': 'steelblue', 'shape': 'block', 'blink': 0}
+>
+
+EXAMPLE CONFIGURATION                                      *colortweaks-example*
+==============================================================================
+
+>
+  let g:colortweaks = {}
+  let g:colortweaks.default = 'vsdark' : 'nova'
+  let g:colortweaks.default_alt = 'seoul256'
+  let g:colortweaks.terminal_cursor = 1
+  let g:colortweaks.gui_cursor = 1
+  let g:colortweaks.rotate = ['vsdark', 'nova', 'onedark', 'neodark', 'zenburn', 'seoul256', 'tomorrow_eighties']
+  let g:colortweaks.dark_cursorline_for = ['northpole', 'peaksea_dark', 'wombat256mod', 'yowish', 'vsdark', 'desert']
+  let g:colortweaks.dark_cursorline_custom = {
+        \'nova': ['guibg=#4f616b ctermbg=236', 'guibg=#282c34 ctermbg=234'],
+        \'onedark': ['guibg=#2c323c ctermbg=236', 'guibg=#1f2329 ctermbg=234'],
+        \'zenburn': ['guibg=#555555 ctermbg=236', 'guibg=#1e1e1e ctermbg=234'],
+        \'seoul256': ['guibg=#3f3f3f ctermbg=236', 'guibg=#2d2d2d ctermbg=234'],
+        \}
+
+  let g:colortweaks.custom_colors = {
+        \'nova':           ['hi MatchParen guifg=#e85858', 'hi VertSplit guibg=#282c34'],
+        \'space-vim-dark': ['hi LineNr guifg=#4d4d4d guibg=#1e1e1e'],
+        \'wombat256mod':   ['hi LineNr guifg=#4d4d4d guibg=#111111', 'hi EndOfBuffer guibg=#242424'],
+        \'desert':         ['hi LineNr guifg=#a1a460 guibg=#2e2e2e', 'hi Pmenu guifg=#c8cc77 guibg=#636363', 'hi PmenuSel guifg=#555726', 'hi PmenuiBar guifg=#c8cc77 guibg=#636363'],
+        \}
+
+  let g:colortweaks.cursor_command = {'color': 'green', 'shape': 'block', 'blink': 1}
+  let g:colortweaks.cursor_visual  = {'color': 'steelblue', 'shape': 'block', 'blink': 0}
+>
 
 
 ==============================================================================
 vim:tw=78:sw=2:ts=2:ft=help:norl:nowrap:
-
-

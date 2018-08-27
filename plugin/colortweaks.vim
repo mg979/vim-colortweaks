@@ -1,12 +1,10 @@
 fun! s:mapkeys(keys, plug)
-    let plug = '<Plug>Color'.a:plug
-    if maparg(a:keys, 'n') == '' && !hasmapto(plug)
-        silent! execute 'nmap <unique>' a:keys plug
-    endif
+  let plug = '<Plug>Color'.a:plug
+  if maparg(a:keys, 'n') == '' && !hasmapto(plug)
+    silent! execute 'nmap <unique>' a:keys plug
+  endif
 endfun
 
-call s:mapkeys(']C', 'Next')
-call s:mapkeys('[C', 'Prev')
 call s:mapkeys(']cs', 'RotateNext')
 call s:mapkeys('[cs', 'RotatePrev')
 call s:mapkeys('<leader>cs', 'Switch')
@@ -16,74 +14,126 @@ call s:mapkeys('<leader>C', 'sList')
 nnoremap <silent> <Plug>ColorsList      :Colors<cr>
 nnoremap <silent> <Plug>ColorSwitch     :call colortweaks#color_switch()<cr>
 nnoremap <silent> <Plug>ColorInvert     :call colortweaks#color_invert()<cr>:unsilent call colortweaks#check_invert()<cr>
-nnoremap <silent> <Plug>ColorNext       :NextColorScheme<cr>:call colortweaks#color_tweaks()<cr>
-nnoremap <silent> <Plug>ColorPrev       :PrevColorScheme<cr>:call colortweaks#color_tweaks()<cr>
 nnoremap <silent> <Plug>ColorRotateNext :call colortweaks#rotate_next()<cr>:unsilent echo "Current color scheme: ".g:colors_name<cr>
 nnoremap <silent> <Plug>ColorRotatePrev :call colortweaks#rotate_prev()<cr>:unsilent echo "Current color scheme: ".g:colors_name<cr>
-
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " Initialize
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
-if !exists('g:colorscheme_default')
-    let g:colorscheme_default = 'default'
-    let g:colors_name = 'default'
-else
-    let g:colors_name = g:colorscheme_default
-endif
+let g:colortweaks = get(g:, 'colortweaks', {})
 
-let g:colorscheme_default_alt    = get(g:, 'colorscheme_default_alt', 'desert')
-let g:colortweaks_cursor_normal  = get(g:, 'colortweaks_cursor_normal', 'green')
-let g:colortweaks_cursor_insert  = get(g:, 'colortweaks_cursor_insert', 'orange')
-let g:colortweaks_cursor_replace = get(g:, 'colortweaks_cursor_replace', 'red')
-let g:colortweaks_presets        = get(g:, 'colortweaks_presets', 1)
-let g:dark_highlight_for         = get(g:, 'dark_highlight_for', [])
-let g:light_highlight_for        = get(g:, 'light_highlight_for', [])
-let g:colorscheme_rotate         = get(g:, 'colorscheme_rotate', [])
-let g:custom_dark_highlight_for  = get(g:, 'custom_dark_highlight_for', {})
-let g:custom_light_highlight_for = get(g:, 'custom_light_highlight_for', {})
-let g:skip_highlight_for         = get(g:, 'skip_highlight_for', [])
-let g:custom_colors_for          = get(g:, 'custom_colors_for', {})
+let g:colortweaks.autocommand                   = get(g:colortweaks, 'autocommand', 0)
+let g:colortweaks.rotate                        = get(g:colortweaks, 'rotate', [])
+let g:colortweaks.custom_colors                 = get(g:colortweaks, 'custom_colors', {})
+let g:colortweaks.generic_presets               = get(g:colortweaks, 'generic_presets', 1)
+let g:colortweaks.guicursor                     = has('gui_running') || has('nvim') ? get(g:colortweaks, 'guicursor', 1) : 0
 
-if !exists('g:dark_highlight_presets')
-    let g:dark_highlight_presets = ['guibg=#2d2d2d ctermbg=235', 'guibg=black ctermbg=black'] | endif
+let g:colortweaks.cursor_normal                 = get(g:colortweaks, 'cursor_normal', {'color': 'green', 'shape': 'block', 'blink': 0})
+let g:colortweaks.cursor_insert                 = get(g:colortweaks, 'cursor_insert', {'color': 'orange', 'shape': 'ver', 'blink': 1})
+let g:colortweaks.cursor_replace                = get(g:colortweaks, 'cursor_replace', {'color': 'red', 'shape': 'hor', 'blink': 1})
+let g:colortweaks.cursor_command                = get(g:colortweaks, 'cursor_command', {})
+let g:colortweaks.cursor_visual                 = get(g:colortweaks, 'cursor_visual', {})
+let g:colortweaks.cursor_terminal               = get(g:colortweaks, 'cursor_terminal', g:colortweaks.cursor_normal)
 
-if !exists('g:light_highlight_presets')
-    let g:light_highlight_presets = ['guibg=#d7d7af ctermbg=187', 'guibg=#d7d7af ctermbg=187'] | endif
-
-call colortweaks#init()
-call colortweaks#switch_to(g:colorscheme_default, 1)
+let g:colortweaks.dark_cursorline_presets       = get(g:colortweaks, 'dark_cursorline_presets', ['guibg=#2d2d2d ctermbg=235', 'guibg=black ctermbg=16'])
+let g:colortweaks.dark_cursorline_for           = get(g:colortweaks, 'dark_cursorline_for', ['desert', 'slate'])
+let g:colortweaks.dark_cursorline_custom        = get(g:colortweaks, 'dark_cursorline_custom', {})
+let g:colortweaks.light_cursorline_presets      = get(g:colortweaks, 'light_cursorline_presets', ['guibg=#d7d7af ctermbg=187', 'guibg=#dadada ctermbg=253'])
+let g:colortweaks.light_cursorline_for          = get(g:colortweaks, 'light_cursorline_for', [])
+let g:colortweaks.light_cursorline_custom       = get(g:colortweaks, 'light_cursorline_custom', {})
 
 command! -bang Colors call fzf#vim#colors({'sink': function('colortweaks#switch_to'), 'options': '--prompt "Colors >>>  "'}, <bang>0)
+command! -nargs=? -complete=color Colorscheme call colortweaks#switch_to(empty(<q-args>) ? g:colortweaks.default : <q-args>)
+
+
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" VimEnter
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+
+au VimEnter * call s:VimEnter()
+
+function! s:VimEnter()
+  if exists('g:loaded_colorscheme_switcher')
+    call s:mapkeys(']C', 'Next')
+    call s:mapkeys('[C', 'Prev')
+    nnoremap <silent> <Plug>ColorNext :NextColorScheme<cr>:call colortweaks#apply()<cr>
+    nnoremap <silent> <Plug>ColorPrev :PrevColorScheme<cr>:call colortweaks#apply()<cr>
+  endif
+
+  let g:colortweaks.default = get(g:colortweaks, 'default', exists('g:colors_name') ? g:colors_name : 'desert')
+  let alt = get(g:colortweaks, 'default_alt', 'desert')
+  let g:colors_name = g:colortweaks.default
+
+  call colortweaks#init()
+  call colortweaks#switch_to(g:colortweaks.default)
+  let g:colortweaks.default_alt = alt
+
+  if g:colortweaks.autocommand
+    autocmd ColorScheme * call colortweaks#switch_to(g:colors_name, 1)
+  endif
+endfunction
+
 
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-" Colors in terminal mode
+" Cursor shape/color
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
-if $COLORTERM == ( 'gnome-terminal' || 'rxvt-xpm' )
-    set t_Co=256
+fun! s:cursorShape(mode, gui)
+  let C = eval('g:colortweaks.cursor_'.a:mode)
+  let C = empty(C) ? eval('g:colortweaks.cursor_normal') : C
+
+  if !a:gui
+    let n = C.shape == 'block' ? 2 : C.shape == 'ver' ? 6 : 4
+    return C.blink ? n-1 : n
+  else
+    let shape = C.shape=='block' ? C.shape : C.shape."10"
+    let blink = C.blink ? '-blinkwait700-blinkoff400-blinkon250' : '-blinkon0'
+    return [shape, blink]
+  endif
+endfun
+
+if $COLORTERM == 'truecolor'
+  set termguicolors
+elseif $COLORTERM == ( 'gnome-terminal' || 'rxvt-xpm' )
+  set t_Co=256
 endif
 
-if get(g:, 'colortweaks_konsole', 0)
-    set termguicolors
-    autocmd VimEnter * silent !konsoleprofile UseCustomCursorColor=1
-    let &t_EI = "\<Esc>]50;CursorShape=0;CustomCursorColor=green\x7"
-    let &t_SI = "\<Esc>]50;CursorShape=1;CustomCursorColor=orange;BlinkingCursorEnabled=1\x7"
-    let &t_SR = "\<Esc>]50;CursorShape=2;CustomCursorColor=red;BlinkingCursorEnabled=0\x7"
-    silent !konsoleprofile CustomCursorColor=red
-    autocmd VimLeave * silent !konsoleprofile CustomCursorColor=gray;BlinkingCursorEnabled=0
-
-elseif &term =~ "xterm\\|rxvt"
-    " cursor in insert mode
-    let &t_SI = "\<Esc>]12;".g:colortweaks_cursor_insert."\x7"
-    " cursor in replace mode
-    let &t_SR = "\<Esc>]12;".g:colortweaks_cursor_replace."\x7"
-    " cursor otherwise
-    let &t_EI = "\<Esc>]12;".g:colortweaks_cursor_normal."\x7"
-    silent !echo -ne "\033]12;".g:colortweaks_cursor_normal."\007"
-    " reset cursor when vim exits
-    autocmd VimLeave * silent !echo -ne "\033]112\007"
-    " use \003]12;gray\007 for gnome-terminal
+if g:colortweaks.guicursor
+  call colortweaks#guicursor()
+  let [shape, blink] = s:cursorShape('normal', 1)
+  let &guicursor = "n:".shape.'-Cursor'.blink
+  let [shape, blink] = s:cursorShape('insert', 1)
+  let &guicursor = "i:".shape.'-iCursor'.blink
+  let [shape, blink] = s:cursorShape('replace', 1)
+  let &guicursor = "r:".shape.'-rCursor'.blink
+  let [shape, blink] = s:cursorShape('command', 1)
+  let &guicursor = "c:".shape.'-cCursor'.blink
+  let [shape, blink] = s:cursorShape('visual', 1)
+  let &guicursor = "v:".shape.'-vCursor'.blink
+  finish
 endif
 
+if get(g:colortweaks, 'terminal_konsole', 0)
+  set termguicolors
+  autocmd VimEnter * silent !konsoleprofile UseCustomCursorColor=1
+  let &t_EI = "\<Esc>]50;CursorShape=0;CustomCursorColor=green;BlinkingCursorEnabled=0\x7"
+  let &t_SI = "\<Esc>]50;CursorShape=1;CustomCursorColor=orange;BlinkingCursorEnabled=1\x7"
+  let &t_SR = "\<Esc>]50;CursorShape=2;CustomCursorColor=red;BlinkingCursorEnabled=1\x7"
+  silent !konsoleprofile CustomCursorColor=green
+  autocmd VimLeave * silent !konsoleprofile CustomCursorColor=gray;BlinkingCursorEnabled=0
+
+elseif get(g:colortweaks, 'terminal_cursor', 0) && &term =~ "xterm\\|rxvt"
+  let N = g:colortweaks.cursor_normal
+  let I = g:colortweaks.cursor_insert
+  let R = g:colortweaks.cursor_replace
+  let T = g:colortweaks.cursor_terminal
+  " cursor in insert mode
+  let &t_SI = "\033[".s:cursorShape('insert', 0)." q\<Esc>]12;".I.color."\x7"
+  " cursor in replace mode
+  let &t_SR = "\033[".s:cursorShape('replace', 0)." q\<Esc>]12;".R.color."\x7"
+  " cursor otherwise
+  let &t_EI = "\033[".s:cursorShape('normal', 0)." q\<Esc>]12;".N.color."\x7"
+  " reset cursor when vim exits
+  autocmd VimLeave * silent !echo -ne "\033[".s:cursorShape('terminal', 0)." q\<Esc>]12;".T.color."\x7"
+endif

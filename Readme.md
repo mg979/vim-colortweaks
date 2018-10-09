@@ -62,7 +62,7 @@ Note that by default it does nothing. You must set up the options.
 |`<Plug>ColorPrev`                  | `[C`          | only with (*)|
 |`<Plug>ColorNext`                  | `]C`          | only with (*)|
 
-as `:colorscheme`, but applying tweaks, or you can set `g:colortweaks.autocommand` to 1:
+as `:colorscheme`, but applying tweaks:
 
     :Colorscheme <arg>
 
@@ -85,7 +85,6 @@ Then add any of these keys:
 |-|-|-|
 |`default`                         | str  | color scheme to be loaded at startup |
 |`default_alt`                     | str  | default alternate color scheme |
-|`autocommand`                     | bool | apply tweaks also on |Colorscheme| autocommand |
 |`terminal_cursor`                 | bool | handle terminal cursor shape/color |
 |`terminal_konsole`                | bool | same, using Konsole terminal |
 |`colorscheme_rotate`              |  []  | colorscheme rotate list |

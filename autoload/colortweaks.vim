@@ -7,15 +7,19 @@ function! colortweaks#init()
   let s:last_colors_insert = colortweaks#cursorline_color(1)
   let s:last_colors_normal = colortweaks#cursorline_color(0)
 
-  autocmd InsertEnter * execute "silent hi CursorLine ".colortweaks#mode(1)
-  autocmd InsertLeave * execute "silent hi CursorLine ".colortweaks#mode(0)
+  augroup colortweaks-cursor
+    au!
+    autocmd InsertEnter * call colortweaks#cursorline(1)
+    autocmd InsertLeave * call colortweaks#cursorline(0)
+  augroup END
 endfunction
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
-function! colortweaks#mode(insert)
-  if a:insert | return s:last_colors_insert
-  else | return s:last_colors_normal | endif
+function! colortweaks#cursorline(insert)
+  if a:insert   | execute "silent hi CursorLine" s:last_colors_insert
+  else          | execute "silent hi CursorLine " s:last_colors_normal
+  endif
 endfunction
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""

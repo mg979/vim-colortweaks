@@ -63,7 +63,6 @@ Mapping                          | Default     | Notes                     ~
 <Plug>ColorNext                  | ]C          | only with {2}
 
 :Colorscheme <arg>                      as `:colorscheme`, but applying tweaks
-                               or you can set `g:colortweaks.autocommand` to 1
 
 If {2} is installed, its command will be run when switching schemes.
 
@@ -88,7 +87,6 @@ g:colortweaks.KEY               | Type |     Details                      ~
 --------------------------------+------+-----------------------------------
 `default`                         | str  | color scheme to be loaded at startup
 `default_alt`                     | str  | default alternate color scheme
-`autocommand`                     | bool | apply tweaks also on |Colorscheme| autocommand
 `terminal_cursor`                 | bool | handle terminal cursor shape/color
 `terminal_konsole`                | bool | same, using Konsole terminal
 `colorscheme_rotate`              |  []  | colorscheme rotate list

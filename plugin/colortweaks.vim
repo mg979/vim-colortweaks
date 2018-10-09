@@ -5,8 +5,8 @@ fun! s:mapkeys(keys, plug)
   endif
 endfun
 
-call s:mapkeys(']cs', 'RotateNext')
-call s:mapkeys('[cs', 'RotatePrev')
+call s:mapkeys(']C', 'RotateNext')
+call s:mapkeys('[C', 'RotatePrev')
 call s:mapkeys('<leader>cs', 'Switch')
 call s:mapkeys('<leader>ci', 'Invert')
 call s:mapkeys('<leader>C', 'sList')
@@ -36,10 +36,10 @@ let g:colortweaks.cursor_command                = get(g:colortweaks, 'cursor_com
 let g:colortweaks.cursor_visual                 = get(g:colortweaks, 'cursor_visual', {})
 let g:colortweaks.cursor_terminal               = get(g:colortweaks, 'cursor_terminal', g:colortweaks.cursor_normal)
 
-let g:colortweaks.dark_cursorline_presets       = get(g:colortweaks, 'dark_cursorline_presets', ['guibg=#2d2d2d ctermbg=235', 'guibg=black ctermbg=16'])
+let g:colortweaks.dark_cursorline_presets       = get(g:colortweaks, 'dark_cursorline_presets', ['guibg=#2d2d2d ctermbg=235', 'guibg=#121212 ctermbg=233'])
 let g:colortweaks.dark_cursorline_for           = get(g:colortweaks, 'dark_cursorline_for', ['desert', 'slate'])
 let g:colortweaks.dark_cursorline_custom        = get(g:colortweaks, 'dark_cursorline_custom', {})
-let g:colortweaks.light_cursorline_presets      = get(g:colortweaks, 'light_cursorline_presets', ['guibg=#d7d7af ctermbg=187', 'guibg=#dadada ctermbg=253'])
+let g:colortweaks.light_cursorline_presets      = get(g:colortweaks, 'light_cursorline_presets', ['guibg=#dfdfdf ctermbg=188', 'guibg=#dadada ctermbg=253'])
 let g:colortweaks.light_cursorline_for          = get(g:colortweaks, 'light_cursorline_for', [])
 let g:colortweaks.light_cursorline_custom       = get(g:colortweaks, 'light_cursorline_custom', {})
 

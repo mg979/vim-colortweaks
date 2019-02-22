@@ -23,7 +23,6 @@ nnoremap <silent> <Plug>ColorRotatePrev :call colortweaks#rotate_prev()<cr>:unsi
 
 let g:colortweaks = get(g:, 'colortweaks', {})
 
-let g:colortweaks.autocommand                   = get(g:colortweaks, 'autocommand', 0)
 let g:colortweaks.rotate                        = get(g:colortweaks, 'rotate', [])
 let g:colortweaks.custom_colors                 = get(g:colortweaks, 'custom_colors', {})
 let g:colortweaks.generic_presets               = get(g:colortweaks, 'generic_presets', 1)
@@ -68,10 +67,6 @@ function! s:VimEnter()
   call colortweaks#init()
   call colortweaks#switch_to(g:colortweaks.default)
   let g:colortweaks.default_alt = alt
-
-  if g:colortweaks.autocommand
-    autocmd ColorScheme * call colortweaks#switch_to(g:colors_name, 1)
-  endif
 endfunction
 
 
@@ -92,12 +87,6 @@ fun! s:cursorShape(mode, gui)
     return [shape, blink]
   endif
 endfun
-
-if $COLORTERM == 'truecolor'
-  set termguicolors
-elseif $COLORTERM == ( 'gnome-terminal' || 'rxvt-xpm' )
-  set t_Co=256
-endif
 
 if g:colortweaks.guicursor
   call colortweaks#guicursor()
@@ -134,6 +123,4 @@ elseif get(g:colortweaks, 'terminal_cursor', 0) && &term =~ "xterm\\|rxvt"
   let &t_SR = "\033[".s:cursorShape('replace', 0)." q\<Esc>]12;".R.color."\x7"
   " cursor otherwise
   let &t_EI = "\033[".s:cursorShape('normal', 0)." q\<Esc>]12;".N.color."\x7"
-  " reset cursor when vim exits
-  autocmd VimLeave * silent !echo -ne "\033[".s:cursorShape('terminal', 0)." q\<Esc>]12;".T.color."\x7"
 endif

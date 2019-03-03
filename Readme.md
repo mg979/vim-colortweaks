@@ -88,19 +88,6 @@ Then add any of these keys:
 |`terminal_cursor`                 | bool | handle terminal cursor shape/color |
 |`terminal_konsole`                | bool | same, using Konsole terminal |
 |`colorscheme_rotate`              |  []  | colorscheme rotate list |
-|`custom_colors`                   |  {}  | scheme specific, other highlight options |
-
-`g:colortweaks.custom_colors` lets you define scheme-specific highlight options. The full command is needed for each item in the lists.
-
-```
-    let g:colortweaks.custom_colors = {
-    \'nova': ['hi MatchParen guifg=#e85858', 'hi VertSplit guibg=#282c34'],
-    \'space-vim-dark': ['hi LineNr guifg=#4d4d4d guibg=#1e1e1e'],
-    \'wombat256mod': ['hi LineNr guifg=#4d4d4d guibg=#111111', 'hi EndOfBuffer guibg=#242424'],
-    \'zenburn': ['hi Normal guibg=#2d2d2d', 'hi Pmenu guibg=#404040'],
-    \'desert': ['hi LineNr guifg=#a1a460 guibg=#2e2e2e', 'hi Pmenu guifg=#c8cc77 guibg=#636363', 'PmenuSel guifg=#555726', 'PmenuiBar guifg=#c8cc77 guibg=#636363'],
-    \}
-```
 
 You can also define functions that will be called when switching to a
 colorscheme, or anytime a colorscheme is switched.
@@ -197,13 +184,6 @@ let g:colortweaks.dark_cursorline_custom = {
       \'seoul256': ['guibg=#3f3f3f ctermbg=236', 'guibg=#2d2d2d ctermbg=234'],
       \'cobalt': ['guibg=#1c1c1c ctermbg=236', 'guibg=#0c0c0c ctermbg=234'],
       \'space-vim-dark': ['guibg=#1c1c1c ctermbg=236', 'guibg=#0c0c0c ctermbg=234'],
-      \}
-
-let g:colortweaks.custom_colors = {
-      \'nova':           ['hi MatchParen guifg=#1e1e1e guibg=#e85858', 'hi VertSplit guibg=#282c34'],
-      \'space-vim-dark': ['hi LineNr guifg=#4d4d4d guibg=#1e1e1e'],
-      \'wombat256mod':   ['hi LineNr guifg=#4d4d4d guibg=#111111', 'hi EndOfBuffer guibg=#242424'],
-      \'desert':         ['hi LineNr guifg=#a1a460 guibg=#2e2e2e', 'hi Pmenu guifg=#c8cc77 guibg=#636363', 'hi PmenuSel guifg=#555726', 'hi PmenuiBar guifg=#c8cc77 guibg=#636363'],
       \}
 
 let g:colortweaks.cursor_command = {'color': 'green', 'shape': 'block', 'blink': 1}

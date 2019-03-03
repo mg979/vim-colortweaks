@@ -151,12 +151,6 @@ function! colortweaks#apply()
   " apply normal mode
   silent execute "hi CursorLine " . s:last_colors_normal
 
-  " further tweaks
-  if has_key(G.custom_colors, g:colors_name)
-    let col = G.custom_colors[g:colors_name]
-    for prop in col | execute prop | endfor
-  endif
-
   " custom functions
   if exists('*ColorTweaks_all')            | call ColorTweaks_all()                     | endif
   if exists('*ColorTweaks_'.g:colors_name) | exe "call ColorTweaks_".g:colors_name."()" | endif

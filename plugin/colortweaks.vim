@@ -24,7 +24,6 @@ nnoremap <silent> <Plug>ColorRotatePrev :call colortweaks#rotate_prev()<cr>:unsi
 let g:colortweaks = get(g:, 'colortweaks', {})
 
 let g:colortweaks.rotate                        = get(g:colortweaks, 'rotate', [])
-let g:colortweaks.custom_colors                 = get(g:colortweaks, 'custom_colors', {})
 let g:colortweaks.generic_presets               = get(g:colortweaks, 'generic_presets', 1)
 let g:colortweaks.guicursor                     = has('gui_running') || has('nvim') ? get(g:colortweaks, 'guicursor', 1) : 0
 

@@ -2,25 +2,7 @@
 " Color Schemes
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
-function! colortweaks#init()
-  let s:color_index = index(g:colortweaks.rotate, g:colors_name)
-  let s:last_colors_insert = colortweaks#cursorline_color(1)
-  let s:last_colors_normal = colortweaks#cursorline_color(0)
-
-  augroup colortweaks-cursor
-    au!
-    autocmd InsertEnter * call colortweaks#cursorline(1)
-    autocmd InsertLeave * call colortweaks#cursorline(0)
-  augroup END
-endfunction
-
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-
-function! colortweaks#cursorline(insert)
-  if a:insert   | execute "silent hi CursorLine" s:last_colors_insert
-  else          | execute "silent hi CursorLine " s:last_colors_normal
-  endif
-endfunction
+let s:color_index = index(g:colortweaks.rotate, g:colors_name)
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
@@ -91,46 +73,8 @@ function! colortweaks#color_switch()
   call colortweaks#switch_to(g:colortweaks.default_alt)
 endfunction
 
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-" Line highlight
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
-function! s:Presets(normal)
-  """Preset highlight is applied if it can be applied for the scheme.
-  let G = g:colortweaks
 
-  if &background == 'light' && index(G.light_cursorline_for, g:colors_name) >= 0
-
-    if a:normal | return G.light_cursorline_presets[1]
-    else        | return G.light_cursorline_presets[0] | endif
-
-  elseif index(G.dark_cursorline_for, g:colors_name) >= 0
-
-    if a:normal | return G.dark_cursorline_presets[1]
-    else        | return G.dark_cursorline_presets[0] | endif
-
-  else          | return '' | endif      " no highlight
-endfunction
-
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-
-function! colortweaks#cursorline_color(normal)
-  """Define line highlight color.
-  let G = g:colortweaks | let scheme = g:colors_name
-
-  if &background == 'light' && has_key(G.light_cursorline_custom, scheme)
-    let col = G.light_cursorline_custom[scheme]
-
-  elseif has_key(G.dark_cursorline_custom, scheme)
-    let col = G.dark_cursorline_custom[scheme]
-
-  else
-    return s:Presets(a:normal)
-  endif
-
-  if a:normal   | return col[1]
-  else          | return col[0] | endif
-endfunction
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " Custom colors
@@ -139,36 +83,61 @@ endfunction
 function! colortweaks#apply()
   let G = g:colortweaks
 
-  " apply presets
-  if G.generic_presets
-    highlight! CursorLine cterm=NONE guifg=NONE ctermfg=NONE
-  endif
-
-  " define line higlight
-  let s:last_colors_insert = colortweaks#cursorline_color(1)
-  let s:last_colors_normal = colortweaks#cursorline_color(0)
-
-  " apply normal mode
-  silent execute "hi CursorLine " . s:last_colors_normal
+  " apply CursorLine if defined for scheme
+  call colortweaks#cursor_line(0)
 
   " custom functions
-  if exists('*ColorTweaks_all')            | call ColorTweaks_all()                     | endif
-  if exists('*ColorTweaks_'.g:colors_name) | exe "call ColorTweaks_".g:colors_name."()" | endif
+  if exists('*ColorTweaks_all')
+    call ColorTweaks_all()
+  endif
+  if exists('*ColorTweaks_'.g:colors_name)
+    call ColorTweaks_{g:colors_name}()
+  endif
 
-  if g:colortweaks.guicursor | call colortweaks#guicursor() | endif
+  if g:colortweaks.cursor.gui
+    call colortweaks#cursor#gui()
+  endif
   let s:color_index = index(G.rotate, g:colors_name)
 endfunction
 
-function! colortweaks#guicursor()
-  if has('gui_running') || has('nvim')
-    let C = g:colortweaks
-    exe "hi iCursor guifg=NONE guibg=".C.cursor_insert.color
-    exe "hi rCursor guifg=NONE guibg=".C.cursor_replace.color
-    if !empty(C.cursor_visual)  | exe "hi vCursor guifg=white guibg=".C.cursor_visual.color
-    else                        | hi! link vCursor Cursor
-    endif
-    if !empty(C.cursor_command) | exe "hi cCursor guifg=white guibg=".C.cursor_command.color
-    else                        | hi! link cCursor Cursor
-    endif
+
+
+
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" CursorLine
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+
+function! colortweaks#cursor_line(insert) abort
+  """Apply CursorLine highlight if defined.
+  let G = g:colortweaks
+
+  let custom_light     = has_key(G.light_cursorline_custom,  g:colors_name)
+  let custom_dark      = has_key(G.dark_cursorline_custom,   g:colors_name)
+  let use_light_preset = index(G.light_cursorline_for, g:colors_name) >= 0
+  let use_dark_preset  = index(G.dark_cursorline_for,  g:colors_name) >= 0
+
+  if &background == 'light' && custom_light
+    let col = G.light_cursorline_custom[g:colors_name]
+
+  elseif &background == 'light' && use_light_preset
+    let col = G.light_cursorline_presets
+
+  elseif custom_dark
+    let col = G.dark_cursorline_custom[g:colors_name]
+
+  elseif use_dark_preset
+    let col = G.dark_cursorline_presets
+
+  else
+    return
+  endif
+
+  if a:insert   | exe "hi CursorLine" col[1]
+  else          | exe "hi CursorLine" col[0]
   endif
 endfunction
+
+
+
+
+

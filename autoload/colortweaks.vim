@@ -116,25 +116,23 @@ function! colortweaks#cursor_line(insert) abort
   let use_light_preset = index(G.light_cursorline_for, g:colors_name) >= 0
   let use_dark_preset  = index(G.dark_cursorline_for,  g:colors_name) >= 0
 
-  if &background == 'light' && custom_light
+  if custom_light && &background == 'light'
     let col = G.light_cursorline_custom[g:colors_name]
 
-  elseif &background == 'light' && use_light_preset
+  elseif use_light_preset && &background == 'light'
     let col = G.light_cursorline_presets
 
-  elseif custom_dark
+  elseif custom_dark && &background == 'dark'
     let col = G.dark_cursorline_custom[g:colors_name]
 
-  elseif use_dark_preset
+  elseif use_dark_preset && &background == 'dark'
     let col = G.dark_cursorline_presets
 
   else
     return
   endif
 
-  if a:insert   | exe "hi CursorLine" col[1]
-  else          | exe "hi CursorLine" col[0]
-  endif
+  exe "hi CursorLine ".col[a:insert]
 endfunction
 
 

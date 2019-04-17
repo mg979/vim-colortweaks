@@ -2,6 +2,11 @@
 " Initialize
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
+if exists('g:loaded_colortweaks')
+  finish
+endif
+let g:loaded_colortweaks = 1
+
 let g:colortweaks = get(g:, 'colortweaks', {})
 
 let g:colortweaks.rotate                        = get(g:colortweaks, 'rotate', [])
@@ -16,7 +21,7 @@ let g:colortweaks.cursor.visual                 = get(g:colortweaks.cursor, 'vis
 let g:colortweaks.dark_cursorline_presets       = get(g:colortweaks, 'dark_cursorline_presets', ['guibg=#2d2d2d ctermbg=235', 'guibg=#121212 ctermbg=233'])
 let g:colortweaks.dark_cursorline_for           = get(g:colortweaks, 'dark_cursorline_for', ['desert', 'slate'])
 let g:colortweaks.dark_cursorline_custom        = get(g:colortweaks, 'dark_cursorline_custom', {})
-let g:colortweaks.light_cursorline_presets      = get(g:colortweaks, 'light_cursorline_presets', ['guibg=#dfdfdf ctermbg=188', 'guibg=#dadada ctermbg=253'])
+let g:colortweaks.light_cursorline_presets      = get(g:colortweaks, 'light_cursorline_presets', ['guibg=#aaaaaa ctermbg=248', 'guibg=#c6c6c6 ctermbg=251'])
 let g:colortweaks.light_cursorline_for          = get(g:colortweaks, 'light_cursorline_for', [])
 let g:colortweaks.light_cursorline_custom       = get(g:colortweaks, 'light_cursorline_custom', {})
 

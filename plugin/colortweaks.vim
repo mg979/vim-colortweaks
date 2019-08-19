@@ -51,8 +51,10 @@ fun! s:VimEnter()
 
   if get(g:, 'loaded_fzf', 0)
     command! -bang Colors call fzf#vim#colors({'sink': function('colortweaks#switch_to'), 'options': '--prompt "Colors >>>  "'}, <bang>0)
+    if get(g:colortweaks, 'mappings', 1)
+      call s:mapkeys('<leader>C', 's')
+    endif
   endif
-  command! -nargs=? -complete=color Colorscheme call colortweaks#switch_to(empty(<q-args>) ? g:colortweaks.default : <q-args>)
 endfun
 
 
@@ -62,25 +64,25 @@ endfun
 " Mappings
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
-nnoremap <silent> <Plug>ColorsList      :Colors<cr>
-nnoremap <silent> <Plug>ColorSwitch     :call colortweaks#color_switch()<cr>
-nnoremap <silent> <Plug>ColorInvert     :call colortweaks#color_invert()<cr>:unsilent call colortweaks#check_invert()<cr>
-nnoremap <silent> <Plug>ColorRotateNext :call colortweaks#rotate_next()<cr>:unsilent echo "Current color scheme: ".g:colors_name<cr>
-nnoremap <silent> <Plug>ColorRotatePrev :call colortweaks#rotate_prev()<cr>:unsilent echo "Current color scheme: ".g:colors_name<cr>
+command! -nargs=? -complete=color ColorTheme call colortweaks#switch_to(empty(<q-args>) ? g:colortweaks.default : <q-args>)
+
+command! ColorAlt        call colortweaks#color_alternate()
+command! ColorInvert     call colortweaks#color_invert()
+command! ColorRotateNext call colortweaks#rotate_next()
+command! ColorRotatePrev call colortweaks#rotate_prev()
 
 if !get(g:colortweaks, 'mappings', 1)
   finish
 endif
 
-fun! s:mapkeys(keys, plug)
-  let plug = '<Plug>Color'.a:plug
-  if maparg(a:keys, 'n') == '' && !hasmapto(plug)
-    silent! execute 'nmap <unique>' a:keys plug
+fun! s:mapkeys(keys, cmd)
+  let cmd = printf(':Color%s<cr>', a:cmd)
+  if maparg(a:keys, 'n') == ''
+    silent! execute 'nnoremap <silent>' a:keys cmd
   endif
 endfun
 
 call s:mapkeys(']C', 'RotateNext')
 call s:mapkeys('[C', 'RotatePrev')
-call s:mapkeys('<leader>cs', 'Switch')
+call s:mapkeys('<leader>cs', 'Alt')
 call s:mapkeys('<leader>ci', 'Invert')
-call s:mapkeys('<leader>C', 'sList')

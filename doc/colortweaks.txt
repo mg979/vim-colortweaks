@@ -56,16 +56,15 @@ MAPPINGS                                                  *colortweaks-mappings*
 ==============================================================================
 
 
----------------------------------+-------------+-----------------------------
-Mapping                          | Default     | Notes                     ~
----------------------------------+-------------+-----------------------------
-<Plug>ColorRotatePrev            | [C          | rotate schemes in custom list
-<Plug>ColorRotateNext            | ]C          | ,,
-<Plug>ColorSwitch                | <leader>cs  | alternate the last 2 schemes
-<Plug>ColorInvert                | <leader>ci  | try to invert dark/light
-<Plug>ColorsList                 | <leader>C   | custom fzf command
-
-:Colorscheme <arg>               as `:colorscheme`, but applying tweaks
+----------------------+-------------+-----------------------------------------
+Command               | Mapping     | Notes                                 ~
+----------------------+-------------+-----------------------------------------
+ColorRotatePrev       | [C          | rotate schemes in custom list
+ColorRotateNext       | ]C          | ,,
+ColorAlt              | <leader>cs  | alternate the last 2 schemes
+ColorInvert           | <leader>ci  | try to invert dark/light
+ColorTheme <arg>      |             | as |:colorscheme|, but applying tweaks
+ColorsList            | <leader>C   | custom fzf command
 
 
 If {2} is installed, its command will be run when switching schemes.

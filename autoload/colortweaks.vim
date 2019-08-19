@@ -11,18 +11,11 @@ function! colortweaks#color_invert()
   if &background == 'dark' | let &background = 'light'
   else | let &background = 'dark' | endif
   if exists('g:colors_name')
-    call colortweaks#apply() | let s:invert_ok = 1
-  else
-    call colortweaks#switch_to(cs) | let s:invert_ok = 0
-  endif
-endfunction
-
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-
-function! colortweaks#check_invert()
-  if s:invert_ok
+    call colortweaks#apply()
+    redraw
     echo "Switched to ".&background." background."
   else
+    call colortweaks#switch_to(cs)
     let bg = &background == 'light' ? 'dark' : 'light'
     echo "No" bg "variant for this scheme."
   endif
@@ -32,7 +25,16 @@ endfunction
 
 function! colortweaks#rotate_cs()
   call colortweaks#switch_to(g:colortweaks.rotate[s:color_index])
-  if g:colors_name == "PaperColor" | set background=dark | endif
+  redraw
+  echo "Current color scheme: ".g:colors_name
+endfunction
+
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+
+function! colortweaks#color_alternate()
+  call colortweaks#switch_to(g:colortweaks.default_alt)
+  redraw
+  echo "Current color scheme: ".g:colors_name
 endfunction
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
@@ -65,12 +67,6 @@ function! colortweaks#switch_to(cs, ...)
     endif
   endif
   call colortweaks#apply()
-endfunction
-
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-
-function! colortweaks#color_switch()
-  call colortweaks#switch_to(g:colortweaks.default_alt)
 endfunction
 
 
